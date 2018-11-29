@@ -1,5 +1,5 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_Icon=..\Kyoko saves\autoit saves\Icons-Server.ico
+#AutoIt3Wrapper_Icon=..\Kyoko saves\autoit saves\Server.ico
 #AutoIt3Wrapper_Res_Description=Server Tool
 #AutoIt3Wrapper_Res_Fileversion=1.0.2.0
 #AutoIt3Wrapper_Res_ProductName=Bot Start exe
@@ -21,9 +21,6 @@
 #include <WinAPI.au3>
 #include <WinAPISysWin.au3>
 #include <GuiStatusBar.au3>
-
-#include "Json.au3"
-#include <Array.au3>
 ;------------------------
 
 Global $arrFileIcons[1] = ["shell32.dll"], $sortdir = 0
@@ -35,25 +32,24 @@ Global $Green = 0x49fc4f
 Global $Orange = 0xe2cb46
 Global $Black = 0x000000
 
-
 Global $title = "MusicBot ServerTool...  createt by H5Pro2"
 
 Local $hGUI
 
 Local $gui = GUICreate($title, 800, 500, -1, -1)
-			;------------------------------------
-			$treeview = GUICtrlCreateTreeView(25, 800, 150, 25)
-			GUICtrlSetBkColor($treeview, $Yelow_Gray)
-			;------------------------------------
-;~ 			$listview = GUICtrlCreateListView("Name|Type|Size|Modified", 212, 25, 510, 350, BitOR($LVS_REPORT,$LVS_SHOWSELALWAYS,$WS_BORDER))
-			$listview = GUICtrlCreateListView("Name|Size", 250, 40, 510, 400)
-			GUICtrlSetBkColor($listview, $Yelow_Gray)
-			_ColumnResize($listview)
-			;------------------------------------
- 			$guipic = GUICtrlCreatePic("bot_files\bot_stuff\st_files\anime-grey-wallpaper.jpg", 0, 0, 800, 480, $WS_SIZEBOX + $WS_SYSMENU)
-			GUICtrlSetResizing(-5, $GUI_DOCKAUTO)
- 			GUICtrlSetState($guipic, $GUI_DISABLE)
-			;------------------------------------
+	;------------------------------------
+	$treeview = GUICtrlCreateTreeView(25, 800, 150, 25)
+	GUICtrlSetBkColor($treeview, $Yelow_Gray)
+	;------------------------------------
+	;$listview = GUICtrlCreateListView("Name|Type|Size|Modified", 212, 25, 510, 350, BitOR($LVS_REPORT,$LVS_SHOWSELALWAYS,$WS_BORDER))
+	$listview = GUICtrlCreateListView("Name|Size", 250, 40, 510, 400)
+	GUICtrlSetBkColor($listview, $Yelow_Gray)
+	_ColumnResize($listview)
+	;------------------------------------
+	$guipic = GUICtrlCreatePic("bot_files\bot_stuff\st_files\anime-grey-wallpaper.jpg", 0, 0, 800, 480, $WS_SIZEBOX + $WS_SYSMENU)
+	GUICtrlSetResizing(-5, $GUI_DOCKAUTO)
+	GUICtrlSetState($guipic, $GUI_DISABLE)
+	;------------------------------------
 
 ;------------------------------------
 Local $idFileMenu = GUICtrlCreateMenu("&File")
@@ -104,10 +100,10 @@ GUICtrlSetBkColor($GUI_Button_Wait, $Gray)
 Global $ordner = "bot_files\user_songlist"
 ;-------------------
 Global $servbat = "bot_files\win_bot_run.exe"
-;Global $servbat = "bot_files\test.exe"
+;Global $servbat = "bot_files\test.exe" ;for testing a simple batch file comile in to a .exe
 ;-------------------
 Global $updatebat = "bot_files\win_npm.exe"
-;Global $updatebat = "bot_files\test.exe"
+;Global $updatebat = "bot_files\test.exe" ;for testing a simple batch file comile in to a .exe
 Global $readmePath = "bot_files\bot_stuff\readme.html"
 ;------------------------------------
 Global $server_path = _WinAPI_GetFullPathName($servbat)
@@ -116,13 +112,13 @@ Global $readmehtmlpath = _WinAPI_GetFullPathName($readmePath)
 ;------------------------------------
 Global $global_file_delete
 Global $serverstart = False
-Global $iTh = 0
 Global $serverlock = False
+Global $iTh = 0
 ;------------------------------------
-Global $aktiv = False
 Global $updatefiles = False
-Global $hWbd = 0
 Global $updatelock = False
+Global $aktiv = False
+Global $hWbd = 0
 ;------------------------------------
 Global $restarting = False
 ;------------------------------------
@@ -173,7 +169,6 @@ While 1
 					;~------------------------
 					Local $iPID = 0
 					Local $iThread = _WinAPI_GetWindowThreadProcessId ( $iTh ,$iPID )
-					;WinSetOnTop($gui, "", $WINDOWS_ONTOP)
 					;~------------------------
 				EndIf
 			EndIf
@@ -197,7 +192,6 @@ While 1
 				;~------------------------
 				WinKill($iTh)
 				$iTh=0
-				;GUICtrlSetBkColor($GUI_Button_Serverstart, $Gray)
 			EndIf
 		Case $GUI_Button_UpdateServer
 			If $serverstart = False Then
@@ -220,25 +214,23 @@ While 1
 
 	EndSwitch
 
-
+	;~------------------------
 	If WinExists($hWbd) Then
 		_update()
 	Else
 		$updatefiles = False
 		_update()
 	EndIf
-
 	;~------------------------
-
 	If WinExists($iTh) Then
 		_Serverstart()
 	Else
 		$serverstart = False
 		_Serverstart()
 	EndIf
-
 	;~------------------------
 WEnd
+
 Func _update()
 	If $updatefiles = true Then
 		If $updatelock = true Then
@@ -295,7 +287,6 @@ func _restartserver()
 	Run($server_path)
 	WinWait($server_path, "", 10)
 	$iTh = WinGetHandle($server_path)
-	;WinSetOnTop($iTh, "", $WINDOWS_NOONTOP)
 	;~------------------------
 	Local $iPID = 0
 	Local $iThread = _WinAPI_GetWindowThreadProcessId ( $iTh ,$iPID )
@@ -303,7 +294,6 @@ func _restartserver()
 EndFunc
 
 Func _closewserver()
-	;~------------------------
 	$serverclosed = False
 	$iTh=0
 	GUICtrlSetBkColor($GUI_Button_Serverstart, $Gray)
@@ -315,7 +305,7 @@ Func _ColumnResize(ByRef $hWnd, $type = 0) ;Resize Listview Column routine
 	_GUICtrlListView_SetColumnWidth($hWnd, 1, $winpos[2] * .25)
 EndFunc   ;==>_ColumnResize
 
-Func _FileGetIcon(ByRef $szIconFile, ByRef $nIcon, $szFile) ;Get Icon for Files - Special Thanks to MrCreator - http://www.autoitscript.com/forum/index.php?s=&showtopic=53071&view=findpost&p=421467
+Func _FileGetIcon(ByRef $szIconFile, ByRef $nIcon, $szFile)
 	Dim $szRegDefault = "", $szDefIcon = ""
 	$szExt = StringMid($szFile, StringInStr($szFile, '.', 0, -1))
 	If $szExt = '.lnk' Then
@@ -397,7 +387,7 @@ Func _SearchFolder($folder, $parent, $level = 0) ;Recursive Folder Search for So
 	_FolderFunc($folders, $folder, $parent, $level)
 EndFunc   ;==>_SearchFolder
 
-;~ -----------------------------------------*
+;~ -----------------------------------------
 
 Func _ShowFolder($tree, $list, $hWnd, $sort = 0) ;Show folder in Source Folder
 	Dim $arrCurrentFolder[1][2]
@@ -527,17 +517,15 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam) ;Notify func
 							_GUICtrlTreeView_SelectItem($treeview, $found)
 							_FillFolder($treeview)
 							_ShowFolder($treeview, $listview, $gui)
-
 						Else
-
 							Run(@ComSpec & " /c " & Chr(34) & $item[1] & Chr(34), "", @SW_HIDE)
 							Sleep(1500)
 						EndIf
 
 					EndIf
 					Return True
-				Case $NM_CLICK
 
+				Case $NM_CLICK
 					If $item[0] <> 0 Then
 						$idx = _GUICtrlTreeView_GetSelection($treeview)
 						$item = StringTrimLeft($item[1], StringInStr($item[1], "\", 0, -1))
@@ -566,14 +554,7 @@ Func WM_NOTIFY($hWnd, $iMsg, $iwParam, $ilParam) ;Notify func
 		Case Else
 			Switch $iCode
 				Case $NM_CLICK ; The user has clicked the left mouse button within the control
-					;If $srcGUImove Then
 					_SendMessage($gui, $WM_SYSCOMMAND, 0xF012, 2, 1)
-					;    $srcGUImove = False
-					;EndIf
-					;If $destGUImove Then
-					;    _SendMessage($dest[0], $WM_SYSCOMMAND, 0xF012, 2,1)
-					;    $destGUImove = False
-					;EndIf
 			EndSwitch
 	EndSwitch
 EndFunc   ;==>WM_NOTIFY
